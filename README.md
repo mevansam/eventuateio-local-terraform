@@ -14,7 +14,7 @@ To use this module use the following HCL snippet as an example.
 #
 
 module "eventuateio-todolist" {
-  source = "https://github.com/mevansam/eventuateio-local-terraform.git"
+  source = "github.com/mevansam/eventuateio-local-terraform"
 
   name                      = "<MY-APP-NAME>"
   eventuateio_local_version = "0.13.0"
