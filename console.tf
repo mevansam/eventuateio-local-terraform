@@ -1,46 +1,46 @@
 #
-# The EventuateIO Change Data Capture (CDC) service
+# The EventuateIO Console service
 #
 
-resource "kubernetes_service" "cdc" {
+resource "kubernetes_service" "console" {
   metadata {
-    name = "${var.name}-eventuateio-cdc"
+    name = "${var.name}-eventuateio-console"
   }
 
   spec {
     selector {
-      app = "${kubernetes_replication_controller.cdc.spec.0.selector.app}"
+      app = "${kubernetes_replication_controller.console.spec.0.selector.app}"
     }
 
     port {
-      port        = 8080
+      port        = 8085
       target_port = 8080
     }
 
-    type = "ClusterIP"
+    type = "NodePort"
   }
 }
 
-resource "kubernetes_replication_controller" "cdc" {
+resource "kubernetes_replication_controller" "console" {
   metadata {
-    name = "${var.name}-eventuateio-cdc"
+    name = "${var.name}-eventuateio-console"
 
     labels {
-      app = "${var.name}-eventuateio-cdc-service"
+      app = "${var.name}-eventuateio-console"
     }
   }
 
   spec {
-    replicas = "${var.cdc_service_scale}"
+    replicas = "${var.console_service_scale}"
 
     selector {
-      app = "${var.name}-eventuateio-cdc-service"
+      app = "${var.name}-eventuateio-console"
     }
 
     template {
       container {
-        image = "${var.cdc_service_image}:${var.eventuateio_local_version}"
-        name  = "cdc"
+        image = "${var.console_service_image}:${var.eventuateio_local_version}"
+        name  = "console"
 
         port {
           container_port = 8080
@@ -67,23 +67,13 @@ resource "kubernetes_replication_controller" "cdc" {
         }
 
         env {
-          name  = "EVENTUATELOCAL_KAFKA_BOOTSTRAP_SERVERS"
-          value = "${kubernetes_service.kafka.spec.0.cluster_ip}:9092"
-        }
-
-        env {
           name  = "EVENTUATELOCAL_ZOOKEEPER_CONNECTION_STRING"
           value = "${kubernetes_service.zookeeper.spec.0.cluster_ip}:2181"
         }
 
         env {
-          name  = "EVENTUATELOCAL_CDC_DB_USER_NAME"
-          value = "root"
-        }
-
-        env {
-          name  = "EVENTUATELOCAL_CDC_DB_PASSWORD"
-          value = "rootpassword"
+          name  = "DEBUG"
+          value = "kafka-node:*"
         }
       }
     }

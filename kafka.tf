@@ -9,7 +9,7 @@ resource "kubernetes_service" "kafka" {
 
   spec {
     selector {
-      app = "${kubernetes_replication_controller.kafka.spec.0.selector.app}"
+      app = "${var.name}-eventuateio-kafka-service"
     }
 
     port {
@@ -39,11 +39,21 @@ resource "kubernetes_replication_controller" "kafka" {
 
     template {
       container {
-        image = "eventuateio/eventuateio-local-kafka:${var.eventuateio_local_version}"
+        image = "${var.kafka_service_image}:${var.eventuateio_local_version}"
         name  = "kafka"
 
         port {
           container_port = 9092
+        }
+
+        env {
+          name  = "ADVERTISED_HOST_NAME"
+          value = "${var.kubo_services_name}"
+        }
+
+        env {
+          name  = "ADVERTISED_PORT"
+          value = "${kubernetes_service.kafka.spec.0.port.0.node_port}"
         }
 
         env {

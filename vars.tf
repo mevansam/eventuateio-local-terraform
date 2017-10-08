@@ -7,9 +7,29 @@ variable "name" {
   type        = "string"
 }
 
+variable "kubo_services_name" {
+  description = "The service domain name where Kubernetes services of type 'NodePort' will be available."
+  type        = "string"
+}
+
 variable "eventuateio_local_version" {
   description = "The version of the eventuateio local images to be deployed to the cluster."
   type        = "string"
+}
+
+variable "console_service_image" {
+  description = "The Docker Hub image path for the console service."
+  default     = "eventuateio/eventuateio-local-console"
+}
+
+variable "console_service_scale" {
+  description = "The scale of the Console service"
+  default     = "1"
+}
+
+variable "cdc_service_image" {
+  description = "The Docker Hub image path for the Change Data Capture service."
+  default     = "eventuateio/eventuateio-local-cdc-service"
 }
 
 variable "cdc_service_scale" {
@@ -17,14 +37,29 @@ variable "cdc_service_scale" {
   default     = "1"
 }
 
+variable "zookeeper_service_image" {
+  description = "The Docker Hub image path for the Zookeeper service."
+  default     = "eventuateio/eventuateio-local-zookeeper"
+}
+
 variable "zookeeper_service_scale" {
   description = "The scale of the zookeeper cluster"
   default     = "1"
 }
 
+variable "kafka_service_image" {
+  description = "The Docker Hub image path for the Kafka service."
+  default     = "mevansam/eventuateio-local-kafka"
+}
+
 variable "kafka_service_scale" {
   description = "The scale of the kafka cluster"
   default     = "1"
+}
+
+variable "mysql_service_image" {
+  description = "The Docker Hub image path for the MySQL service."
+  default     = "eventuateio/eventuateio-local-mysql"
 }
 
 output "mysql_service_port" {

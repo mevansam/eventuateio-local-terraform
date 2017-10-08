@@ -9,7 +9,7 @@ resource "kubernetes_service" "zookeeper" {
 
   spec {
     selector {
-      app = "${kubernetes_replication_controller.zookeeper.spec.0.selector.app}"
+      app = "${var.name}-eventuateio-zookeeper-service"
     }
 
     port {
@@ -52,7 +52,7 @@ resource "kubernetes_replication_controller" "zookeeper" {
 
     template {
       container {
-        image = "eventuateio/eventuateio-local-zookeeper:${var.eventuateio_local_version}"
+        image = "${var.zookeeper_service_image}:${var.eventuateio_local_version}"
         name  = "zookeeper"
 
         port {

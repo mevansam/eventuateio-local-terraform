@@ -9,7 +9,7 @@ resource "kubernetes_service" "mysql" {
 
   spec {
     selector {
-      app = "${kubernetes_replication_controller.mysql.spec.0.selector.app}"
+      app = "${var.name}-eventuateio-mysql-service"
     }
 
     port {
@@ -37,7 +37,7 @@ resource "kubernetes_replication_controller" "mysql" {
 
     template {
       container {
-        image = "eventuateio/eventuateio-local-mysql:${var.eventuateio_local_version}"
+        image = "${var.mysql_service_image}:${var.eventuateio_local_version}"
         name  = "mysql"
 
         port {
