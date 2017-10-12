@@ -46,7 +46,7 @@ resource "kubernetes_replication_controller" "mysql" {
 
         env {
           name  = "MYSQL_ROOT_PASSWORD"
-          value = "rootpassword"
+          value = "${var.mysql_root_password}"
         }
 
         env {
@@ -56,7 +56,7 @@ resource "kubernetes_replication_controller" "mysql" {
 
         env {
           name  = "MYSQL_PASSWORD"
-          value = "mysqlpw"
+          value = "${var.mysql_app_user_passwd}"
         }
       }
     }

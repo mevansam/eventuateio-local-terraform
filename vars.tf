@@ -62,6 +62,16 @@ variable "mysql_service_image" {
   default     = "eventuateio/eventuateio-local-mysql"
 }
 
+variable "mysql_root_password" {
+  description = "The root password for the MySQL server."
+  default     = "rootpassword"
+}
+
+variable "mysql_app_user_passwd" {
+  description = "The application user's password for the Eventuate MySQL service."
+  default     = "mysqlpw"
+}
+
 output "mysql_service_port" {
   value = "${kubernetes_service.mysql.spec.0.port.0.node_port}"
 }
